@@ -28,4 +28,21 @@ export default defineConfig({
   build: {
     commonjsOptions: { transformMixedEsModules: true },
   },
+  server: {
+    // Dev-only proxy to the Zenex testnet backend; a build sets VITE_API_URL instead.
+    proxy: {
+      '/zenex-api': {
+        target: 'https://api-testnet.zenex.trade',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/zenex-api/, ''),
+        // Log upstream failures in the dev terminal so a 500 is attributable.
+        configure: (proxy) => {
+          proxy.on('error', (err, req) => console.warn(`[zenex-api proxy] ${req.url}: ${err.message}`))
+          proxy.on('proxyRes', (res, req) => {
+            if ((res.statusCode ?? 0) >= 500) console.warn(`[zenex-api proxy] ${req.url}: upstream ${res.statusCode}`)
+          })
+        },
+      },
+    },
+  },
 })
