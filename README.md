@@ -92,8 +92,13 @@ shown on chart markers and in the panel.
   fetched fills, which equals the lifecycle netPnl the Zenex leaderboard ranks on (checked against
   `/v1/leaderboards/rolling/7d`).
 
-`src/competition/CompetitorPanel.tsx` lists competitors ranked by realised + unrealised PnL, with
-unrealised PnL marked to the live ticker: `notional × (last / entry − 1)`, sign flipped for shorts.
+`src/competition/ranking.ts` computes the leaderboard once per render: registered competitors ranked
+by realised + unrealised PnL (unrealised marked to the live ticker, `notional × (last / entry − 1)`,
+sign flipped for shorts), return on margin net of entry fees, and the unregistered slots apart.
+`CompetitorPanel.tsx` shows it as the side list (gold/silver/bronze ranks, open positions, unregistered
+slots dimmed at the bottom). `Spotlight.tsx` shows two cards under the chart: the current leader
+("Leading", crown) and the current last place ("Rekt", clown), with big avatar, PnL and return.
+Last place only appears once two or more competitors have addresses.
 
 Limits: 100 fills per competitor per poll (the API maximum); for a one-hour event that is plenty.
 Funding and borrowing accrued on an open position are not in the unrealised figure until a fill

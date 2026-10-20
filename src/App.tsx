@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { PriceChart } from '@/chart/PriceChart'
 import { CompetitorPanel } from '@/competition/CompetitorPanel'
+import { Spotlight } from '@/competition/Spotlight'
+import { rankCompetitors } from '@/competition/ranking'
 import { useCompetitorActivity } from '@/competition/useCompetitorActivity'
 import { COMPETITORS } from '@/competition/whitelist'
 import { fetchConfig, RESOLUTIONS, type Resolution, type ZenexMarket } from '@/lib/zenexApi'
@@ -33,6 +35,7 @@ export default function App() {
   const market = markets.find((m) => m.id === marketId)
   // Only the whitelisted competitors' fills and positions are fetched and drawn.
   const { summaries, markers } = useCompetitorActivity(COMPETITORS, market?.id)
+  const leaderboard = rankCompetitors(summaries, last?.price ?? null)
 
   return (
     <main className="flex h-screen flex-col bg-[#101116] text-neutral-100">
@@ -68,19 +71,22 @@ export default function App() {
         </div>
       </header>
       <section className="flex min-h-0 flex-1">
-        <div className="min-w-0 flex-1">
-          {configError && <div className="p-4 text-sm text-red-400">Config unavailable: {configError}</div>}
-          {market && (
-            <PriceChart
-              chartSymbol={market.chartSymbol}
-              marketId={market.id}
-              resolution={resolution}
-              markers={showMarkers ? markers : []}
-              onLastPrice={(price, at) => setLast({ price, at })}
-            />
-          )}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1">
+            {configError && <div className="p-4 text-sm text-red-400">Config unavailable: {configError}</div>}
+            {market && (
+              <PriceChart
+                chartSymbol={market.chartSymbol}
+                marketId={market.id}
+                resolution={resolution}
+                markers={showMarkers ? markers : []}
+                onLastPrice={(price, at) => setLast({ price, at })}
+              />
+            )}
+          </div>
+          <Spotlight leaderboard={leaderboard} />
         </div>
-        <CompetitorPanel summaries={summaries} lastPrice={last?.price ?? null} />
+        <CompetitorPanel leaderboard={leaderboard} lastPrice={last?.price ?? null} />
       </section>
     </main>
   )
