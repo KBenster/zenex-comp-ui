@@ -9,6 +9,8 @@
  * In dev the Vite proxy forwards /zenex-api to the testnet backend; a build sets VITE_API_URL.
  */
 
+import { MOCK, mockResponse } from './mock'
+
 export const API_BASE: string =
   (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '/zenex-api'
 
@@ -59,6 +61,7 @@ export interface Ticker {
 export const PRICE_SCALE = 1e18
 
 async function getJson<T>(path: string, timeoutMs = 10_000): Promise<T> {
+  if (MOCK) return mockResponse(path) as T
   const response = await fetch(`${API_BASE}${path}`, { signal: AbortSignal.timeout(timeoutMs) })
   const text = await response.text()
   let payload: unknown
@@ -89,30 +92,6 @@ interface UdfHistory {
   h?: number[]
   l?: number[]
   c?: number[]
-}
-
-/** One fill on a market, as the public trades feed reports it (no account: that route is anonymised). */
-export interface MarketTrade {
-  id: string
-  side: 'long' | 'short'
-  kind: 'open' | 'increase' | 'decrease' | 'close' | 'liquidation'
-  /** Fill price, 18-decimal integer string. */
-  priceAtomic: string
-  /** Notional in collateral atomic units (7 decimals for test USDC). */
-  notionalAtomic: string
-  tokensAtomic: string
-  occurredAt: string
-  transactionHash: string
-}
-
-/** Newest first. `GET /v1/markets/:market/trades`, backed by the indexer's core.fills table. */
-export async function fetchMarketTrades(marketId: string, limit = 100, cursor?: string): Promise<{ items: MarketTrade[]; nextCursor?: string }> {
-  const query = new URLSearchParams({ limit: String(limit) })
-  if (cursor) query.set('cursor', cursor)
-  const body = await getJson<{ data: { items: MarketTrade[]; nextCursor?: string } }>(
-    `/v1/markets/${encodeURIComponent(marketId)}/trades?${query}`,
-  )
-  return body.data
 }
 
 /** One fill of one account, from `GET /v1/accounts/:account/trade/fills` (carries the user). */

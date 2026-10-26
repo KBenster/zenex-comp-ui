@@ -1,1 +1,338 @@
 @import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --color-chart-line-primary: var(--chart-line-primary);
+    --color-chart-line-secondary: var(--chart-line-secondary);
+    --color-chart-brush-border: var(--chart-brush-border);
+    --color-chart-tooltip-background: var(--chart-tooltip-background);
+    --color-chart-tooltip-foreground: var(--chart-tooltip-foreground);
+    --color-chart-tooltip-muted: var(--chart-tooltip-muted);
+    --color-chart-scale-02: var(--chart-scale-02);
+    --color-chart-scale-03: var(--chart-scale-03);
+    --color-chart-scale-04: var(--chart-scale-04);
+    --color-chart-scale-05: var(--chart-scale-05);
+    --color-chart-segment-line: var(--chart-segment-line);
+    --color-chart-segment-background: var(--chart-segment-background);
+    --color-chart-marker-badge-foreground: var(--chart-marker-badge-foreground);
+    --color-chart-marker-badge-background: var(--chart-marker-badge-background);
+    --color-chart-indicator-secondary-color: var(--chart-indicator-secondary-color);
+    --color-chart-indicator-color: var(--chart-indicator-color);
+    --color-chart-scale-pattern-color: var(--chart-scale-pattern-color);
+    --chart-scale-05: var(--chart-scale-05);
+    --chart-scale-04: var(--chart-scale-04);
+    --chart-scale-03: var(--chart-scale-03);
+    --chart-scale-02: var(--chart-scale-02);
+    --color-chart-scale-01: var(--chart-scale-01);
+    --color-chart-scale-mix: var(--chart-scale-mix);
+    --color-chart-label: var(--chart-label);
+    --color-chart-marker-foreground: var(--chart-marker-foreground);
+    --color-chart-marker-border: var(--chart-marker-border);
+    --color-chart-marker-background: var(--chart-marker-background);
+    --chart-tooltip-muted: var(--chart-tooltip-muted);
+    --chart-tooltip-foreground: var(--chart-tooltip-foreground);
+    --chart-tooltip-background: var(--chart-tooltip-background);
+    --chart-brush-border: var(--chart-brush-border);
+    --color-chart-grid: var(--chart-grid);
+    --color-chart-crosshair: var(--chart-crosshair);
+    --chart-line-secondary: var(--chart-line-secondary);
+    --chart-line-primary: var(--chart-line-primary);
+    --color-chart-foreground-muted: var(--chart-foreground-muted);
+    --color-chart-foreground: var(--chart-foreground);
+    --color-chart-background: var(--chart-background);
+    --color-chart-negative: var(--chart-negative);
+    --color-chart-positive: var(--chart-positive);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+}
+
+:root {
+    /* shadcn base vars the bklit charts read; app is dark-only */
+    --popover: #232428;
+    --popover-foreground: #f4f4f5;
+    --chart-1: oklch(0.585 0.233 277.117);
+    --chart-2: oklch(0.852 0.199 91.936);
+    --chart-3: oklch(0.667 0.295 322.15);
+    --chart-4: oklch(0.56 0.021 213.5);
+    --chart-5: oklch(0 0 0);
+    --chart-positive: oklch(0.696 0.17 162.48);
+    --chart-negative: oklch(0.637 0.237 25.331);
+    --chart-background: oklch(1 0 0);
+    --chart-foreground: oklch(0.145 0.004 285);
+    --chart-foreground-muted: oklch(0.55 0.014 260);
+    --chart-line-primary: var(--chart-1);
+    --chart-line-secondary: var(--chart-2);
+    --chart-crosshair: oklch(0.4 0.1828 274.34);
+    --chart-grid: oklch(0.9 0 0);
+    --chart-brush-border: var(--chart-grid);
+    --chart-tooltip-background: var(--popover);
+    --chart-tooltip-foreground: var(--popover-foreground);
+    --chart-tooltip-muted: var(--muted-foreground);
+    --chart-marker-background: oklch(0.97 0.005 260);
+    --chart-marker-border: oklch(0.85 0.01 260);
+    --chart-marker-foreground: oklch(0.3 0.01 260);
+    --chart-label: oklch(0.45 0.01 260);
+    --chart-scale-mix: oklch(1 0 0);
+    --chart-scale-01: oklch(0.922 0 0);
+    --chart-scale-02: color-mix(in oklab, var(--chart-1) 35%, var(--chart-scale-mix));
+    --chart-scale-03: color-mix(in oklab, var(--chart-1) 55%, var(--chart-scale-mix));
+    --chart-scale-04: color-mix(in oklab, var(--chart-1) 78%, var(--chart-scale-mix));
+    --chart-scale-05: var(--chart-1);
+    --chart-scale-pattern-color: oklch(1 0 0);
+    --chart-indicator-color: oklch(0.21 0.006 285);
+    --chart-indicator-secondary-color: oklch(0.913 0 0);
+    --chart-marker-badge-background: oklch(0 0 0);
+    --chart-marker-badge-foreground: oklch(0.84 0 0);
+    --chart-segment-background: oklch(0.756 0 0 / 0.06);
+    --chart-segment-line: oklch(0.5 0 0 / 0.25);
+}
+
+.dark {
+    --chart-1: oklch(0.585 0.233 277.117);
+    --chart-2: oklch(0.852 0.199 91.936);
+    --chart-3: oklch(0.667 0.295 322.15);
+    --chart-4: oklch(0.56 0.021 213.5);
+    --chart-5: oklch(1 0 0);
+    --chart-positive: oklch(0.765 0.177 163.223);
+    --chart-negative: oklch(0.704 0.191 22.216);
+    --chart-background: oklch(0.145 0 0);
+    --chart-foreground: oklch(0.45 0 0);
+    --chart-foreground-muted: oklch(0.65 0.01 260);
+    --chart-crosshair: oklch(0.45 0 0);
+    --chart-grid: oklch(0.25 0 0);
+    --chart-brush-border: var(--chart-grid);
+    --chart-marker-background: oklch(0.25 0.01 260);
+    --chart-marker-border: oklch(0.4 0.01 260);
+    --chart-marker-foreground: oklch(0.9 0 0);
+    --chart-label: oklch(0.75 0.01 260);
+    --chart-scale-mix: oklch(0.25 0 0);
+    --chart-scale-01: oklch(0.3 0 0);
+    --chart-scale-02: color-mix(in oklab, var(--chart-1) 35%, var(--chart-scale-mix));
+    --chart-scale-03: color-mix(in oklab, var(--chart-1) 55%, var(--chart-scale-mix));
+    --chart-scale-04: color-mix(in oklab, var(--chart-1) 78%, var(--chart-scale-mix));
+    --chart-scale-05: var(--chart-1);
+    --chart-scale-pattern-color: oklch(0.145 0 0);
+    --chart-indicator-color: oklch(1 0 0);
+    --chart-indicator-secondary-color: oklch(0.145 0 0);
+    --chart-marker-badge-background: oklch(1 0 0);
+    --chart-marker-badge-foreground: oklch(0.15 0 0);
+    --chart-segment-background: oklch(0.41 0.0127 248.14 / 0.25);
+    --chart-segment-line: oklch(1 0 0 / 0.25);
+}
+
+body {
+    font-family: "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #000;
+}
+
+/* Japanese broadcast look: display face, telop outline, halftone stage, hazard stripes. */
+.font-display {
+    font-family: "Dela Gothic One", "Noto Sans JP", sans-serif;
+    font-weight: 400;
+}
+/* Luma (event poster): green + lime, green-tinted halftone. Display type stays Dela Gothic One (pixel type read poorly on stream). */
+/* Bklit axis labels are text-xs (12px): unreadable on a 1920px stage. */
+.zx-chart .text-chart-label {
+    display: inline-block;
+    transform: translateY(-50%);
+    color: #d4d4d8;
+    font-size: 24px;
+    line-height: 1;
+}
+:root[data-theme="luma"] .bg-stage {
+    background-image:
+        radial-gradient(rgb(36 211 140 / 0.09) 1px, transparent 1.6px),
+        repeating-linear-gradient(-45deg, transparent 0 46px, rgb(219 255 60 / 0.03) 46px 49px);
+}
+.telop {
+    paint-order: stroke fill;
+    -webkit-text-stroke: 0.14em #000;
+    text-shadow: 0.07em 0.07em 0 #000;
+}
+.bg-stage {
+    background-color: #08080d;
+    background-image:
+        radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1.6px),
+        repeating-linear-gradient(-45deg, transparent 0 46px, rgb(255 255 255 / 0.025) 46px 49px);
+    background-size: 16px 16px, auto;
+}
+.hazard {
+    /* yellow/black so it reads on the red liquidation screen */
+    background: repeating-linear-gradient(-45deg, #ffd60a 0 28px, #000 28px 56px);
+}
+
+/*
+ * Motions after yui540.com/motions (our own CSS; timing read from the live pages).
+ * 5  counters: digits streak out/in.
+ * 13 shape wipe: the next screen is revealed through a growing diamond.
+ * 20 blind wipe: strips slide in from the left in shuffled order, then out to the right.
+ * 23 shatter: shards spread apart, then fall away with a 3D tilt.
+ */
+@keyframes zx-char-out {
+    from { transform-origin: right center; transform: translateX(0) scaleX(1); opacity: 1; }
+    to { transform-origin: right center; transform: translateX(-120%) scaleX(1.8); opacity: 0; }
+}
+@keyframes zx-char-in {
+    from { transform-origin: left center; transform: translateX(120%) scaleX(1.8); opacity: 0; }
+    to { transform-origin: left center; transform: translateX(0); opacity: 1; }
+}
+@keyframes zx-diamond-reveal {
+    from { clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%); }
+    to { clip-path: polygon(50% -110%, 210% 50%, 50% 210%, -110% 50%); }
+}
+@keyframes zx-strip-in {
+    from { transform: translateX(-101%); }
+    to { transform: translateX(0); }
+}
+@keyframes zx-strip-out {
+    from { transform: translateX(0); }
+    to { transform: translateX(101%); }
+}
+@keyframes zx-shard-spread {
+    from { top: 0; left: 0; }
+    to { top: var(--top); left: var(--left); }
+}
+@keyframes zx-shard-fall {
+    from { transform: perspective(640px) translateY(0); }
+    to { transform: perspective(640px) translateY(120%) rotateX(var(--rx)) rotateY(var(--ry)); }
+}
+.zx-char-out { animation: zx-char-out 0.6s cubic-bezier(0.74, 0.02, 0.13, 0.98) both; }
+.zx-char-in { animation: zx-char-in 0.6s cubic-bezier(0.74, 0.02, 0.13, 0.98) both; }
+.zx-diamond-reveal { animation: zx-diamond-reveal 1.2s cubic-bezier(0.93, 0, 0.1, 1.01) both; }
+.zx-strip { animation-duration: 0.4s, 0.4s; animation-timing-function: cubic-bezier(0.87, 0, 0.06, 1.01), cubic-bezier(0.87, 0, 0.06, 1.01); animation-fill-mode: both, forwards; animation-name: zx-strip-in, zx-strip-out; }
+.zx-shard { animation-name: zx-shard-spread, zx-shard-fall; animation-duration: 0.4s, 1.2s; animation-timing-function: cubic-bezier(0, 0.63, 0.48, 0.99), ease-in-out; animation-fill-mode: both, both; }
+/*
+ * 10 looping bands: hazard tape slides one stripe period per 1.2 s; text band scrolls on a 5 s loop.
+ * 11 word sweep: rows of giant text cover the stage, then sweep away alternately left/right.
+ * 68 mutual follow: two avatars roll in from opposite sides, overshoot and settle; the label pill pops.
+ */
+@keyframes zx-hazard-slide {
+    from { background-position-x: 0; }
+    /* -45deg stripes with a 56px period repeat every 56 / sin(45deg) px horizontally */
+    to { background-position-x: 79.196px; }
+}
+.hazard { animation: zx-hazard-slide 1.2s linear infinite; }
+@keyframes zx-band-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+.zx-band-scroll { animation: zx-band-scroll 5s linear infinite; }
+@keyframes zx-sweep-right {
+    from { transform: translateX(-1920px); }
+    to { transform: translateX(1920px); }
+}
+@keyframes zx-sweep-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-3840px); }
+}
+.zx-sweep { animation-duration: 3.5s; animation-timing-function: cubic-bezier(0.8, 0.01, 0.19, 1); animation-fill-mode: both; }
+@keyframes zx-roll-left {
+    0% { opacity: 0; transform: translateX(-120%) rotate(-140deg); }
+    50% { opacity: 1; transform: translateX(14%) rotate(10deg); }
+    75% { transform: translateX(-4%) rotate(-2deg); }
+    100% { opacity: 1; transform: translateX(0) rotate(0deg); }
+}
+@keyframes zx-roll-right {
+    0% { opacity: 0; transform: translateX(120%) rotate(140deg); }
+    50% { opacity: 1; transform: translateX(-14%) rotate(-10deg); }
+    75% { transform: translateX(4%) rotate(2deg); }
+    100% { opacity: 1; transform: translateX(0) rotate(0deg); }
+}
+@keyframes zx-pill-pop {
+    0% { transform: scaleX(0.8); opacity: 0; }
+    60% { transform: scaleX(1.04); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 1; }
+}
+.zx-roll-left { animation: zx-roll-left 0.8s ease-in-out 0.2s both; }
+.zx-roll-right { animation: zx-roll-right 0.8s ease-in-out 0.2s both; }
+.zx-pill-pop { animation: zx-pill-pop 0.4s ease-in-out 0.6s both; }
+
+/*
+ * 45 pagination: the new value rolls in with a 20% overshoot (rows FLIP with the same shape, in JS).
+ * 24 onomatopoeia: キキーッ skids in and stops hard; the caption boings (scale with a skew wobble).
+ * 47 notification badge: count rolls up, badge jiggles, the avatar wobbles like a ringing bell.
+ * 7  heart burst: heart pops, ring flashes, 10 sparks fly out, mini hearts drift up.
+ * 16 letters drop in and bounce twice;  19 letters hop in tilted and sway to rest.
+ */
+@keyframes zx-rank-out { 0% { transform: translateY(0); } 60% { transform: translateY(-120%); } 100% { transform: translateY(-100%); } }
+@keyframes zx-rank-in { 0% { transform: translateY(100%); } 60% { transform: translateY(-20%); } 100% { transform: translateY(0); } }
+.zx-rank-out { animation: zx-rank-out 0.6s ease-in-out both; }
+.zx-rank-in { animation: zx-rank-in 0.6s ease-in-out both; }
+
+@keyframes zx-skid { from { transform: translateX(1400px); } to { transform: translateX(0); } }
+@keyframes zx-boing {
+    0% { transform: scale(0); }
+    40% { transform: scale(1.35) skew(10deg); }
+    60% { transform: scale(1); }
+    80% { transform: scale(1.12) skew(-8deg); }
+    100% { transform: scale(1); }
+}
+.zx-skid { animation: zx-skid 0.8s cubic-bezier(0, 0.73, 0.58, 1) both; }
+.zx-boing { animation: zx-boing 0.9s ease-in-out 0.5s both; }
+
+@keyframes zx-count-out { 0% { transform: translateY(0); } 60% { transform: translateY(-104%); } 100% { transform: translateY(-100%); } }
+@keyframes zx-count-in { 0% { transform: translateY(100%); } 60% { transform: translateY(-4%); } 100% { transform: translateY(0); } }
+@keyframes zx-badge-jiggle { 0% { transform: scale(1, 1); } 50% { transform: scale(1.5, 1.1); } 75% { transform: scale(1.27, 1); } 100% { transform: scale(1, 1); } }
+@keyframes zx-bell { 0% { transform: rotate(0); } 10% { transform: rotate(-9deg); } 40% { transform: rotate(9deg); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(2deg); } 100% { transform: rotate(0); } }
+.zx-count-out { animation: zx-count-out 0.6s ease-in-out both; }
+.zx-count-in { animation: zx-count-in 0.6s ease-in-out both; }
+.zx-badge-jiggle { animation: zx-badge-jiggle 0.9s ease-in-out both; }
+.zx-bell { animation: zx-bell 0.8s ease-in-out both; }
+
+@keyframes zx-heart-pop { 0% { transform: scale(0); } 40% { transform: scale(1.6); } 60% { transform: scale(1.04); } 80% { transform: scale(1.1); } 100% { transform: scale(1.04); } }
+@keyframes zx-heart-ring { 0%, 100% { opacity: 0; } 50%, 80% { opacity: 0.4; } 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
+@keyframes zx-spark { 0% { opacity: 0; transform: rotate(var(--rotate)) translateY(0); } 100% { opacity: 1; transform: rotate(var(--rotate)) translateY(var(--translate-y)); } }
+@keyframes zx-mini-drift { to { transform: translate(var(--x), var(--y)) rotate(var(--r)); } }
+@keyframes zx-mini-rise { 0%, 100% { opacity: 0; } 30%, 70% { opacity: 0.9; } 0% { transform: translateY(0); } 100% { transform: translateY(-200%); } }
+.zx-heart-pop { animation: zx-heart-pop 0.7s ease-in-out 0.15s both; }
+.zx-heart-ring { animation: zx-heart-ring 1.1s cubic-bezier(0, 0.06, 0.29, 1) both; }
+.zx-spark { animation: zx-spark 0.65s cubic-bezier(0.63, -0.01, 0.29, 1) both; }
+.zx-mini-drift { animation: zx-mini-drift 0.8s cubic-bezier(0, 0.31, 0.18, 0.99) both; }
+.zx-mini-rise { animation: zx-mini-rise 0.8s cubic-bezier(0.64, 0.08, 1, 0.97) both; }
+
+@keyframes zx-letter-drop { 0% { transform: translateY(-101%); } 40% { transform: translateY(0); } 55% { transform: translateY(-12%); } 70% { transform: translateY(0); } 85% { transform: translateY(-6%); } 100% { transform: translateY(0); } }
+.zx-letter-drop { animation: zx-letter-drop 0.7s ease-in-out both; }
+/* hidden until its turn: the start pose would otherwise hang over the title while it waits */
+@keyframes zx-hop-x { 0% { transform: translateX(32%); opacity: 0; } 8% { opacity: 1; } 40% { transform: translateX(-16%); } 70% { transform: translateX(8%); } 100% { transform: translateX(0); } }
+@keyframes zx-hop-y { 0% { transform: translateY(-1.8em); } 40% { transform: translateY(0.2em); } 60% { transform: translateY(0); } 80% { transform: translateY(0.1em); } 100% { transform: translateY(0); } }
+@keyframes zx-hop-r { 0% { transform: rotate(50deg); } 40% { transform: rotate(-16deg); } 70% { transform: rotate(8deg); } 100% { transform: rotate(0); } }
+.zx-hop-x { animation: zx-hop-x 0.84s ease-in-out both; }
+.zx-hop-y { animation: zx-hop-y 0.84s ease-in-out both; }
+.zx-hop-r { animation: zx-hop-r 0.84s ease-in-out both; }
+
+/* Versus lead change: the new leader lunges across and the other one takes the hit (owner-named "attacks them"). */
+@keyframes zx-lunge {
+    0% { transform: translateX(0); }
+    30% { transform: translateX(-50px) scale(0.95); }
+    55% { transform: translateX(780px) scale(1.15); }
+    70% { transform: translateX(740px) scale(1.1); }
+    100% { transform: translateX(0) scale(1); }
+}
+@keyframes zx-hit {
+    0%, 100% { transform: translateX(0) rotate(0); filter: none; }
+    15% { transform: translateX(60px) rotate(14deg); filter: brightness(2.2) saturate(0); }
+    35% { transform: translateX(-24px) rotate(-8deg); filter: none; }
+    55% { transform: translateX(14px) rotate(4deg); }
+    75% { transform: translateX(-6px) rotate(-2deg); }
+}
+.zx-lunge { animation: zx-lunge 1s ease-in-out 1.1s both; }
+.zx-hit { animation: zx-hit 0.7s ease-out 1.65s both; }
+
+/*
+ * Timed overlays hide themselves on real time: a background tab throttles JS timers (to once a
+ * minute after a while), which left the lead caption on screen long after its 3 s. The JS timer
+ * still unmounts it; this just guarantees it is not visible past --zx-hide-at.
+ */
+@keyframes zx-autohide { to { opacity: 0; visibility: hidden; } }
+.zx-autohide { animation: zx-autohide 0.25s linear var(--zx-hide-at, 3s) forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+    .zx-char-in, .zx-diamond-reveal, .zx-shard, .hazard, .zx-band-scroll, .zx-roll-left, .zx-roll-right, .zx-pill-pop,
+    .zx-rank-in, .zx-skid, .zx-boing, .zx-lunge, .zx-hit, .zx-count-in, .zx-badge-jiggle, .zx-bell, .zx-letter-drop, .zx-hop-x, .zx-hop-y, .zx-hop-r { animation: none; }
+    /* These would otherwise sit frozen on top of the content. */
+    .zx-char-out, .zx-strip, .zx-sweep, .zx-rank-out, .zx-count-out, .zx-heart-burst { display: none; }
+}

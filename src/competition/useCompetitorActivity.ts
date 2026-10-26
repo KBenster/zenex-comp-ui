@@ -6,10 +6,20 @@
  * close) is open while its newest fill is not a close or liquidation. Net PnL per fill is gross
  * PnL minus every fee, which matches the lifecycle netPnl the leaderboard ranks on.
  */
-import { useEffect, useMemo, useState } from 'react'
-import type { ChartMarker } from '@/chart/markers'
+import { useEffect, useRef, useState } from 'react'
 import { fetchAccountFills, PRICE_SCALE, type AccountFill } from '@/lib/zenexApi'
 import type { Competitor } from './whitelist'
+import { DURATION_SEC, START_CONFIGURED, START_SEC } from './schedule'
+
+/**
+ * With a configured start, only trades inside the event count: wallets may have history before it,
+ * and nothing after the bell should move the frozen results or pop a liquidation over them.
+ */
+const inEvent = (f: AccountFill) => {
+  if (!START_CONFIGURED) return true
+  const t = Date.parse(f.occurredAt) / 1000
+  return t >= START_SEC && t < START_SEC + DURATION_SEC
+}
 
 const COLLATERAL_DECIMALS = 7
 const toUsd = (atomic: string | bigint) => Number(atomic) / 10 ** COLLATERAL_DECIMALS
@@ -39,7 +49,7 @@ export interface CompetitorSummary {
   error?: string
 }
 
-function netPnl(fill: AccountFill): number {
+export function netPnl(fill: AccountFill): number {
   const f = fill.fees
   return toUsd(
     BigInt(fill.pnlAtomic) -
@@ -92,24 +102,12 @@ export function deriveOpenPositions(competitor: Competitor, fills: AccountFill[]
   return open
 }
 
-export function fillToMarker(competitor: Competitor, fill: AccountFill): ChartMarker {
-  const kind = fill.kind === 'liquidation' ? 'liquidation' : fill.kind === 'open' || fill.kind === 'increase' ? 'open' : 'close'
-  const sideLabel = fill.side === 'long' ? 'L' : 'S'
-  const size = toUsd(fill.notionalAtomic).toFixed(0)
-  const verb = fill.kind === 'liquidation' ? 'LIQ' : fill.kind === 'close' || fill.kind === 'decrease' ? 'close' : ''
-  return {
-    id: `${competitor.address}:${fill.id}`,
-    time: Math.floor(Date.parse(fill.occurredAt) / 1000),
-    price: toPrice(fill.priceAtomic),
-    side: fill.side,
-    kind,
-    label: `${competitor.name} ${verb} ${sideLabel}${size}`.replace(/\s+/g, ' ').trim(),
-  }
-}
-
 export function useCompetitorActivity(competitors: Competitor[], marketId: string | undefined, pollMs = 5_000) {
   const [summaries, setSummaries] = useState<CompetitorSummary[]>([])
   const key = competitors.map((c) => c.address).join(',')
+  // Last good result per address: a failed poll keeps it (flagged) instead of zeroing the trader,
+  // which would jump the ranking and replay old liquidations when the fetch recovers.
+  const lastGood = useRef(new Map<string, CompetitorSummary>())
 
   useEffect(() => {
     if (!marketId || competitors.length === 0) {
@@ -124,16 +122,20 @@ export function useCompetitorActivity(competitors: Competitor[], marketId: strin
           if (!competitor.address) return { competitor, fills: [], openPositions: [], realizedPnl: 0, liquidations: 0 }
           try {
             const page = await fetchAccountFills(competitor.address, marketId, 100)
-            const fills = page.items
-            return {
+            const fills = page.items.filter(inEvent)
+            const summary = {
               competitor,
               fills,
               openPositions: deriveOpenPositions(competitor, fills),
               realizedPnl: fills.reduce((sum, f) => sum + netPnl(f), 0),
               liquidations: fills.filter((f) => f.kind === 'liquidation').length,
             }
+            lastGood.current.set(competitor.address, summary)
+            return summary
           } catch (e) {
-            return { competitor, fills: [], openPositions: [], realizedPnl: 0, liquidations: 0, error: String((e as Error).message ?? e) }
+            const error = String((e as Error).message ?? e)
+            const prev = lastGood.current.get(competitor.address)
+            return prev ? { ...prev, error } : { competitor, fills: [], openPositions: [], realizedPnl: 0, liquidations: 0, error }
           }
         }),
       )
@@ -148,24 +150,6 @@ export function useCompetitorActivity(competitors: Competitor[], marketId: strin
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, marketId, pollMs])
 
-  const markers = useMemo<ChartMarker[]>(() => {
-    const out: ChartMarker[] = []
-    for (const s of summaries) {
-      for (const fill of s.fills) out.push(fillToMarker(s.competitor, fill))
-      for (const p of s.openPositions) {
-        out.push({
-          id: `${s.competitor.address}:entry:${p.lifecycleId}`,
-          time: p.openedAt,
-          price: p.entryPrice,
-          side: p.side,
-          kind: 'open',
-          label: `${s.competitor.name} ${p.side === 'long' ? 'Long' : 'Short'} ${p.leverage.toFixed(1)}x`,
-          entryLine: true,
-        })
-      }
-    }
-    return out
-  }, [summaries])
 
-  return { summaries, markers }
+  return { summaries }
 }

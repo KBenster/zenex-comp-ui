@@ -55,7 +55,15 @@ export function parseCompetitors(raw: string | undefined, fallback: Competitor[]
   }
 }
 
-export const COMPETITORS: Competitor[] = parseCompetitors(import.meta.env.VITE_COMPETITORS as string | undefined)
+import { MOCK } from '@/lib/mock'
+
+// Mock mode: give two empty slots fake addresses so the board has four ranked players and two pending.
+/** False when VITE_COMPETITORS is unset or invalid and the checked-in placeholder list is in use. */
+export const COMPETITORS_CONFIGURED = parseCompetitors(import.meta.env.VITE_COMPETITORS as string | undefined, []).length > 0
+const parsed = parseCompetitors(import.meta.env.VITE_COMPETITORS as string | undefined)
+export const COMPETITORS: Competitor[] = MOCK
+  ? parsed.map((c, i) => (c.address || i > 3 ? c : { ...c, address: `GMOCK${i}${'X'.repeat(50)}` }))
+  : parsed
 
 export function shortAddress(address: string): string {
   return address ? `${address.slice(0, 4)}…${address.slice(-4)}` : 'address not set'

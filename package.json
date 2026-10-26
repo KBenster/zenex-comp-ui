@@ -7,15 +7,25 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:api": "node scripts/check-api.mjs"
   },
   "dependencies": {
+    "@number-flow/react": "^0.6.2",
     "@stellar/stellar-sdk": "^16.0.1",
+    "@visx/curve": "^4.0.0",
+    "@visx/event": "^4.0.0",
+    "@visx/responsive": "^4.0.0",
+    "@visx/scale": "^4.0.0",
+    "@visx/shape": "^4.0.0",
     "@zenith-protocols/zenex-sdk": "github:zenith-protocols/zenex-sdk-js#main",
     "buffer": "^6.0.3",
-    "lightweight-charts": "^5.2.1",
+    "clsx": "^2.1.1",
+    "d3-array": "^3.2.4",
+    "motion": "^14.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.1.12"
   },
   "devDependencies": {
