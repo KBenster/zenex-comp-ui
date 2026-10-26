@@ -28,8 +28,12 @@ export function rankCompetitors(summaries: CompetitorSummary[], lastPrice: numbe
   const rows = summaries.map((s): RankedCompetitor => {
     const unrealizedPnl = s.openPositions.reduce((sum, p) => sum + positionPnl(p, lastPrice), 0)
     const total = s.realizedPnl + unrealizedPnl
-    // ponytail: return = total / margin posted on opens; README says "net of entry fees", refine when the real file turns up
-    const margin = s.fills.filter((f) => f.kind === 'open').reduce((sum, f) => sum + Number(f.marginAtomic) / 1e7, 0)
+    // Margin posted across open/increase fills. The fill's marginAtomic includes the fee escrow;
+    // net of base + impact fee it equals the lifecycle's marginPosted, which Zenex's leaderboard
+    // divides by for netPnlPercent.
+    const margin = s.fills
+      .filter((f) => f.kind === 'open' || f.kind === 'increase')
+      .reduce((sum, f) => sum + (Number(f.marginAtomic) - Number(f.fees.baseAtomic) - Number(f.fees.impactAtomic)) / 1e7, 0)
     return { ...s, rank: null, unrealizedPnl, total, returnPct: margin > 0 ? (total / margin) * 100 : null }
   })
   const ranked = rows.filter((r) => r.competitor.address).sort((a, b) => b.total - a.total)
