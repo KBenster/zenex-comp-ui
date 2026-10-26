@@ -4,6 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { fileURLToPath } from 'node:url'
 
+const API = new URL(process.env.ZENEX_API ?? 'https://arena.robeart.me/api')
+
 // Same shape as zenex-ui's config, trimmed to what an empty app needs.
 // The node polyfills give @stellar/stellar-sdk the Buffer/process globals it expects in the browser.
 export default defineConfig({
@@ -29,12 +31,13 @@ export default defineConfig({
     commonjsOptions: { transformMixedEsModules: true },
   },
   server: {
-    // Dev-only proxy to the Zenex testnet backend; a build sets VITE_API_URL instead.
+    // Dev-only proxy to the same backend vercel.json rewrites to in production (the arena the
+    // competition runs on). Override with ZENEX_API=https://api-testnet.zenex.trade npm run dev.
     proxy: {
       '/zenex-api': {
-        target: 'https://api-testnet.zenex.trade',
+        target: API.origin,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/zenex-api/, ''),
+        rewrite: (path) => path.replace(/^\/zenex-api/, API.pathname.replace(/\/$/, '')),
         // Log upstream failures in the dev terminal so a 500 is attributable.
         configure: (proxy) => {
           proxy.on('error', (err, req) => console.warn(`[zenex-api proxy] ${req.url}: ${err.message}`))
