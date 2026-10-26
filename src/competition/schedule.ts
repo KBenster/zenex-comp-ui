@@ -32,11 +32,11 @@ export interface Phase {
  */
 export const PHASES: Phase[] = [
   { name: 'Build', minutes: 10, badge: 'BUILD TIME', jpTitle: 'ビルドタイム', title: 'Build', countdown: { label: 'POWER HOUR', detail: 'Trading opens at 0:00' } },
-  { name: 'Hot 1', minutes: 5, badge: 'XLM HOT', jpTitle: 'ホットタイム', title: 'Hot 1', subtitle: 'XLM', band: 'XLM HOT', countdown: { label: 'XLM HOT', detail: 'XLM is the only market that counts' } },
+  { name: 'Hot 1', minutes: 5, badge: 'DONG HOT', jpTitle: 'ホットタイム', title: 'Hot 1', subtitle: 'DONG', band: 'DONG HOT', countdown: { label: 'DONG HOT', detail: 'DONG is the only market that counts' } },
   { name: 'Build', minutes: 10, badge: 'BUILD TIME', jpTitle: 'ビルドタイム', title: 'Build' },
-  { name: 'Hot 2', minutes: 5, badge: 'XLM HOT', jpTitle: 'ホットタイム', title: 'Hot 2', subtitle: 'XLM', band: 'XLM HOT', countdown: { label: 'XLM HOT', detail: 'XLM is the only market that counts' } },
+  { name: 'Hot 2', minutes: 5, badge: 'DONG HOT', jpTitle: 'ホットタイム', title: 'Hot 2', subtitle: 'DONG', band: 'DONG HOT', countdown: { label: 'DONG HOT', detail: 'DONG is the only market that counts' } },
   { name: 'Final', minutes: 20, badge: 'FINAL', jpTitle: 'ファイナル', title: 'Final' },
-  { name: 'Boost', minutes: 10, badge: '100X BOOST', jpTitle: '100倍ブースト', title: '100x', subtitle: 'Boost', hot: true, countdown: { label: '100X BOOST', detail: 'Max leverage for everyone, until the bell' } },
+  { name: 'Boost', minutes: 10, badge: '500X BOOST', jpTitle: '500倍ブースト', title: '500x', subtitle: 'Boost', hot: true, countdown: { label: '500X BOOST', detail: 'Max leverage for everyone, until the bell' } },
 ]
 
 export const DURATION_SEC = PHASES.reduce((s, p) => s + p.minutes * 60, 0)
